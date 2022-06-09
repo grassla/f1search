@@ -29,7 +29,6 @@ while(reader.hasNext()==true){
            }
            if(electron>=1&&pos_pion>=2&&neg_pion>=2){
               particles.show();
-              break;
            }
       }
 }
