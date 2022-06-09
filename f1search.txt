@@ -1,0 +1,13 @@
+//HIPO4 library imports
+import org.jlab.jnp.hipo4.io.*;
+import org.jlab.jnp.hipo4.data.*;
+
+//HipoReader object and file load
+HipoReader reader = new HipoReader();
+reader.open("coatjava/bin/SimOuts.hipo");
+ 
+ //Create event class and particle bank
+SchemaFactory factory = reader.getSchemaFactory();
+factory.show();
+Bank  particles = new Bank(factory.getSchema("REC::Particle"));
+Event 	event = new Event();
