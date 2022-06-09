@@ -27,7 +27,7 @@ while(reader.hasNext()==true){
              if(pid == 211) pos_pion++;
              if(pid == -211) neg_pion++;
          }
-         if(electron>=1&&pos_pion>=2$$neg_pion>=2){
+         if(electron>=1&&pos_pion>=2&&neg_pion>=2){
              particles.show();
              break;
          }
