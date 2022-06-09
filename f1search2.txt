@@ -14,9 +14,13 @@ Event 	event = new Event();
 
 //Loop through events until we find the particles we want
 reader.getEvent(event,0);
+int readCounter = 0;
+int tagCounter = 0;
 while(reader.hasNext()==true){
      reader.nextEvent(event);
      event.read(particles);
+     event.setEventTag(0);
+     readCounter++;
      int electron = 0;
      int pos_pion = 0;
      int neg_pion = 0;
@@ -28,6 +32,8 @@ while(reader.hasNext()==true){
              if(pid == -211) neg_pion++;
          }
          if(electron>=1&&pos_pion>=2&&neg_pion>=2){
+             tagCounter++;
+             event.setEventTag(10);
              particles.show();
              break;
          }
