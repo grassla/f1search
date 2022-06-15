@@ -26,8 +26,8 @@ Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"))
 // if there is one we can create lorentz vector for the particle and calculate W2 and Q2, and plot it. 
 // First we will declare histogram objects and canvas object:
 
-H1F  hW = new H1F("hW" ,100, 0.5, 4.0);
-H1F hQ2 = new H1F("hQ2",100, 0.1, 4.0);
+H1F  hW = new H1F("hW" ,100, 0.5, 8.0);
+H1F hQ2 = new H1F("hQ2",100, 0.1, 8.0);
 hW.setTitleX("W [GeV]");
 hQ2.setTitleX("Q^2 [GeV/c^2]");
   
