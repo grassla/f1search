@@ -28,12 +28,13 @@ Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"))
 
 H1F  hW = new H1F("hW" ,100, 0.5, 8.0);
 H1F hQ2 = new H1F("hQ2",100, 0.1, 8.0);
-H1F hTheta = new H1F ("h1Theta, //IDK WHAT HERE);
-H1F hPhi = new H1F ("h1Phi, //NOW WHAT??);
+H1F    hmxppitheta = new H1F("hmxppitheta" ,100,0.0, 1.0);
+H1F      hmxppiphi = new H1F("hmxppiphi" ,100,-3.16, 3.16);
+  
 hW.setTitleX("W [GeV]");
 hQ2.setTitleX("Q^2 [GeV/c^2]");
-hTheta.setTitleX("Theta [degrees]");
-hPhi.setTitleX("Phi [degrees]";
+hmxppitheta.setTitleX("Theta [degrees]");
+hmxppiphi.setTitleX("Phi [degrees]");
   
 TCanvas ec = new TCanvas("ec",800,400);
  
@@ -47,6 +48,7 @@ int neg_pion = 0;
 while(reader.hasNext()==true){
      reader.nextEvent(event);
      event.read(particles);
+     PhysicsEvent physEvent = DataManager.getPhysicsEvent(10.6,particles);
      if(particles.getRows()>0){
          int pid = particles.getInt("pid",0);
               if(pid == 11) elec++;
@@ -56,6 +58,9 @@ while(reader.hasNext()==true){
      }
      if(elec>=1&&pos_pion>=2&&neg_pion>=2){
           counter++;
+          Particle pim = physEvent.getParticle("[b]+[t]-[e-]-[Particle pim = physEvent.getParticle("[b]+[t]-[e-]-[p]-[pi+]");p]-[pi+]");
+          hmxppitheta.fill(pim.vector().theta());
+          hmxppiphi.fill(pim.vector().phi());
 }
 System.out.println("processed # " + counter + " , electrons : " + elec + " , pos pions : " + pos_pion + " , neg pions : " + neg_pion);
  
@@ -98,16 +103,17 @@ while(reader.hasNext()==true){
             
             hW.fill(vW.mass());
             hQ2.fill(-vQ2.mass2());
-            hTheta.fill(##SOMETHING##);
-            hPhi.fill(##SOMETHING##);
+            hmxppitheta.fill(##SOMETHING##);
+            hmxppiphi.fill(##SOMETHING##);
          }
      }
 }
   
-ec.divide(2,1); //CHANGE? MAYBE
+ec.divide(4,1); //CHANGE? MAYBE
   
 ec.cd(0).draw(hW);
 ec.cd(1).draw(hQ2);
-ec.cd(2).draw(hTheta);
-ec.cd(3).draw(hPhi);
+ec.cd(2).draw(hmxppitheta);
+ec.cd(3).draw(hmxppiphi);
 //in progress
+
