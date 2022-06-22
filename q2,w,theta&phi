@@ -6,6 +6,8 @@ import org.jlab.groot.ui.*;
 //---- imports for HIPO4 library
 import org.jlab.jnp.hipo4.io.*; 
 import org.jlab.jnp.hipo4.data.*;
+import org.jlab.jnp.hipo4.data.Event;
+import org.jlab.jnp.hipo4.data.Bank;
 
 //---- imports for GROOT library
 import org.jlab.groot.data.*;
@@ -13,6 +15,10 @@ import org.jlab.groot.graphics.*;
 
 //---- imports for PHYSICS library
 import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
   
 // Create the reader and load in the file
 
@@ -71,8 +77,6 @@ LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,0.938);
 LorentzVector electron = new LorentzVector(); 
 LorentzVector       vW = new LorentzVector(); 
 LorentzVector      vQ2 = new LorentzVector();
-LorentzVector   vTheta = new LorentzVector();
-LorentzVector     vPhi = new LorentzVector();
 
 // Read the first event and reset to the begining of the file
 
@@ -97,14 +101,11 @@ while(reader.hasNext()==true){
              
             vQ2.copy(vBeam);
             vQ2.sub(electron);
-             
-             //STUFF HERE
-             
             
             hW.fill(vW.mass());
             hQ2.fill(-vQ2.mass2());
-            hmxppitheta.fill(##SOMETHING##);
-            hmxppiphi.fill(##SOMETHING##);
+            hmxppitheta.fill(pim.vector().theta());
+            hmxppiphi.fill(pim.vector().phi());
          }
      }
 }
