@@ -1,0 +1,131 @@
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+
+//---- imports for HIPO4 library
+import org.jlab.jnp.hipo4.io.*; 
+import org.jlab.jnp.hipo4.data.*;
+
+//---- imports for GROOT library
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+
+//---- imports for PHYSICS library
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+  
+// Create the reader and load in the file
+
+HipoReader reader = new HipoReader(); 
+reader.open("coatjava/bin/SimOuts.hipo"); 
+ 
+Event     event = new Event(); 
+Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
+ 
+// Loop over the events in the file and read particle bank and check for electron in the first raw, 
+// if there is one we can create lorentz vector for the particle and calculate W2 and Q2, and plot it. 
+// First we will declare histogram objects and canvas object:
+
+H1F  hW = new H1F("hW" ,100, 0.5, 8.0);
+H1F hQ2 = new H1F("hQ2",100, 0.1, 8.0);
+H1F    hmxppitheta = new H1F("hmxppitheta" ,100,0.0, 1.0);
+H1F      hmxppiphi = new H1F("hmxppiphi" ,100,-3.16, 3.16);
+  
+hW.setTitleX("W [GeV]");
+hQ2.setTitleX("Q^2 [GeV/c^2]");
+hmxppitheta.setTitleX("Theta [degrees]");
+hmxppiphi.setTitleX("Phi [degrees]");
+  
+TCanvas ec = new TCanvas("ec",800,400);
+
+EventFilter  eventFilter = new EventFilter("11:211:211:-211:-211:X+:X-:Xn");
+ 
+// Loop over the events and count how many events we have where at least one electron and at least two pos and neg pions are detected.
+
+reader.getEvent(event,0); // Reads the first event and resets to the begining of the file
+int filterCounter = 0;
+int matchCounter  = 0;
+int eventCounter  = 0;
+  
+while(reader.hasNext()==true){
+     reader.nextEvent(event);
+     event.read(particles);
+     PhysicsEvent physEvent = DataManager.getPhysicsEvent(10.6,particles);
+     if(eventFilter.isValid(physEvent)==true){
+         filterCounter++;
+         Particle  mxPim = physEvent.getParticle("[b]+[t]-[11]-[2212]-[211]");
+         Particle  match = physEvent.getBestMatch(mxPim,-1);
+         if(match.getStatus()>0){
+             matchCounter++;
+          Particle pim = physEvent.getParticle("[b]+[t]-[e-]-[Particle pim = physEvent.getParticle("[b]+[t]-[e-]-[p]-[pi+]");p]-[pi+]");
+          hmxppitheta.fill(pim.vector().theta());
+          hmxppiphi.fill(pim.vector().phi());
+
+System.out.println("processed # " + counter + " , electrons : " + elec + " , pos pions : " + pos_pion + " , neg pions : " + neg_pion);
+ 
+// Loop over the events and calculate Q2, W, Theta, and Phi from the LorentzVectors 
+
+LorentzVector  vBeam   = new LorentzVector(0.0,0.0,10.6,10.6);
+LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,0.938);
+LorentzVector electron = new LorentzVector(); 
+LorentzVector       vW = new LorentzVector(); 
+LorentzVector      vQ2 = new LorentzVector();
+
+H1F  hW = new H1F("hW" ,100, 0.5, 8.0);
+H1F hQ2 = new H1F("hQ2",100, 0.1, 8.0);
+H1F    hmxppitheta = new H1F("hmxppitheta" ,100,0.0, 1.0);
+H1F      hmxppiphi = new H1F("hmxppiphi" ,100,-3.16, 3.16);
+
+// Read the first event and reset to the begining of the file
+
+reader.getEvent(event,0); 
+  
+while(reader.hasNext()==true){
+     reader.nextEvent(event);
+     event.read(particles);
+     if(particles.getRows()>0){
+         int pid = particles.getInt("pid",0);
+         if(pid==11){
+            electron.setPxPyPzM(
+                particles.getFloat("px",0), 
+                particles.getFloat("py",0),
+                particles.getFloat("pz",0),
+                0.0005
+                );
+             
+            vW.copy(vBeam);
+            vW.add(vTarget);
+            vW.sub(electron);
+             
+            vQ2.copy(vBeam);
+            vQ2.sub(electron);
+             
+             //STUFF HERE
+             
+            
+            hW.fill(vW.mass());
+            hQ2.fill(-vQ2.mass2());
+            hmxppitheta.fill(pim.vector().theta());
+            hmxppiphi.fill(pim.vector().phi());
+         }
+     }
+}
+ 
+ 
+hmxppitheta.setTitleX("#theta^x(e^-p#pi^+) [rad]");
+hmxppiphi.setTitleX("#phi^x(e^-p#pi^+) [rad]");
+hW.setTitleX("W [GeV]");
+hQ2.setTitleX("Q^2 [GeV/c^2]");
+
+ec.divide(4,1); //CHANGE? MAYBE
+  
+ec.cd(0).draw(hW);
+ec.cd(1).draw(hQ2);
+ec.cd(2).draw(hmxppitheta);
+ec.cd(3).draw(hmxppiphi);
+
+//in progress
