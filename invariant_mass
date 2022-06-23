@@ -22,8 +22,8 @@ reader.getEvent(event,0);
 int filterCounter = 0;
 int eventCounter  = 0;
 
-// H1F    hf1 = new H1F("hf1"   ,100,0.05, 0.28); //  WHAT ARE THESE NUMBERS
-// H1F hf1vec = new H1F("hf1vec",100,0.05, 0.28); // WHAT ARE THESE NUMBERS 
+H1F    hf1 = new H1F("hf1"   ,100,0.00, 2.00); // histogram range in GeV
+H1F hf1vec = new H1F("hf1vec",100,0.00, 2.00); https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_-_Java_Analysis_Tools_Examples
   
 while(reader.hasNext()==true){
       
@@ -39,10 +39,10 @@ while(reader.hasNext()==true){
          filterCounter++;
          
          // The particle Lorentz vector is constructed by adding
-         // two photons lorentz vectors 
-         // [22,0] - first photons (or 0'th)
-         // [22,1] - second photons (or index 1)
-         // Particle f1 = physEvent.getParticle("[22,0]+[22,1]"); // ADD DIFFERENT THINGS
+         // four pions lorentz vectors 
+         // [211,0] - first pi+ (or 0'th)
+         // [211,1] - second pi+ (or index 1)
+         Particle f1 = physEvent.getParticle("[211,0]+[211,1]+[-211,0]+[-211,1]"); 
          hf1.fill(f1.mass());
          
          
@@ -50,30 +50,36 @@ while(reader.hasNext()==true){
          
          // This is another way that invariant mass can be calculated
          // Get particles one by one, and add their lorentz vectors
-         // Particle gamma0 = physEvent.getParticleByPid(22,0); // DIFFERENT PARTICLES
-         // Particle gamma1 = physEvent.getParticleByPid(22,1); // DIFFERENT PARTICLES
-         // LorentzVector vL_f1 = LorentzVector.from(gamma0.vector()); // DIFFERENT PARTICLES
-         // vL_pi0.add(gamma1.vector()); // DIFFERENT PARTICLES
-         hf1vec.fill(vL_f1.mass());
+         // Particle pi+0 = physEvent.getParticleByPid(211,0); 
+         // Particle pi+1 = physEvent.getParticleByPid(211,1); 
+         // Particle pi-0 = physEvent.getParticleByPid(-211,0); 
+         // Particle pi-1 = physEvent.getParticleByPid(-211,1); 
+         // LorentzVector vL_f1 = LorentzVector.from(pi+0.vector()); 
+         // vL_f1.add(pi+1.vector()); 
+         // vL_f1.add(pi-0.vector()); 
+         // vL_f1.add(pi-1.vector()); 
+         // hf1vec.fill(vL_f1.mass());
+         
+         
+         
+         
      }
      eventCounter++;
 }
 System.out.println("analyzed " + eventCounter + " events. # passed filter = " + filterCounter);
 
-
-
-
-// Create the canvas with 2? MAYBE MORE pads and draw the histograms
-TCanvas ec = new TCanvas(“ec”,800,400);
+// Create the canvas with 2 pads and draw the histograms
+TCanvas ec = new TCanvas("ec",800,400);
  
   
-// hpi0.setTitleX("M(#gamma#gamma) [GeV]"); DIFFERENT PARTICLES
+hf1.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
 hf1.setTitleY("Counts");
-// hpi0vec.setTitleX("M(#gamma#gamma) [GeV]"); DIFFERENT PARTICLES
+hf1vec.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
 hf1vec.setTitleY("Counts"); 
  
 ec.divide(2,1); 
 ec.cd(0).draw(hf1);
 ec.cd(1).draw(hf1vec);
 
-// in progress
+
+// DATAMANAGER????
