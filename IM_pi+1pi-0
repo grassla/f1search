@@ -22,8 +22,8 @@ reader.getEvent(event,0);
 int filterCounter = 0;
 int eventCounter  = 0;
 
-H1F    hf1 = new H1F("hf1"   ,100,0.00, 2.00); // histogram range in GeV
-H1F hf1vec = new H1F("hf1vec",100,0.00, 2.00); https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_-_Java_Analysis_Tools_Examples
+H1F    hevent2 = new H1F("hevent2"   ,100,0.00, 2.00); // histogram range in GeV
+H1F hevent2vec = new H1F("hevent2vec",100,0.00, 2.00); https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_-_Java_Analysis_Tools_Examples
   
 while(reader.hasNext()==true){
       
@@ -42,8 +42,8 @@ while(reader.hasNext()==true){
          // four pions lorentz vectors 
          // [211,0] - first pi+ (or 0'th)
          // [211,1] - second pi+ (or index 1)
-         Particle f1 = physEvent.getParticle("[211,1]+[-211,0]"); 
-         hf1.fill(f1.mass());
+         Particle event2 = physEvent.getParticle("[211,1]+[-211,0]"); 
+         hevent2.fill(event2.mass());
          
      }
      eventCounter++;
@@ -54,14 +54,14 @@ System.out.println("analyzed " + eventCounter + " events. # passed filter = " + 
 TCanvas ec = new TCanvas("ec",800,400);
  
   
-hf1.setTitleX("M(#pi+#pi-) [GeV]"); 
-hf1.setTitleY("Counts");
-hf1vec.setTitleX("M(#pi+#pi-) [GeV]"); 
-hf1vec.setTitleY("Counts"); 
+hevent2.setTitleX("M(#pi+1#pi-0) [GeV]"); 
+hevent2.setTitleY("Counts");
+hevent2vec.setTitleX("M(#pi+1#pi-0) [GeV]"); 
+hevent2vec.setTitleY("Counts"); 
  
 ec.divide(2,1); 
-ec.cd(0).draw(hf1);
-ec.cd(1).draw(hf1vec);
+ec.cd(0).draw(hevent2);
+ec.cd(1).draw(hevent2vec);
 
 
 // DATAMANAGER????
