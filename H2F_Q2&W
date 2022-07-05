@@ -1,0 +1,85 @@
+import org.jlab.jnp.hipo4.io.*; 
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+HipoReader reader = new HipoReader(); 
+reader.open("coatjava/bin/SimOuts.hipo"); 
+ 
+Event     event = new Event(); 
+Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
+
+H2F  hQ2&W = new H2F("hQ2&W" , 100, 0.5, 8.0, 100, 0.5, 8.0);
+hQ2&W.setTitleX("W [GeV]");
+hQ2&W.setTitleY("Q^2 [GeV/c^2]");
+  
+TCanvas ec = new TCanvas("ec",800,400);
+ 
+// Loop over the events and count how many events we have where at least one electron and at least two pos and neg pions are detected.
+
+int counter = 0;
+int elec = 0;
+int pos_pion = 0;
+int neg_pion = 0;
+  
+while(reader.hasNext()==true){
+     reader.nextEvent(event);
+     event.read(particles);
+     if(particles.getRows()>0){
+         int pid = particles.getInt("pid",0);
+              if(pid == 11) elec++;
+              if(pid == 211) pos_pion++;
+              if(pid == -211) neg_pion++;
+         }
+     }
+     if(elec>=1&&pos_pion>=2&&neg_pion>=2){
+          counter++;
+}
+System.out.println("processed # " + counter + " , electrons : " + elec + " , pos pions : " + pos_pion + " , neg pions : " + neg_pion);
+ 
+// Loop over the events and calculate Q2 and W from the LorentzVectors 
+
+LorentzVector  vBeam   = new LorentzVector(0.0,0.0,10.6,10.6);
+LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,0.938);
+LorentzVector electron = new LorentzVector(); 
+LorentzVector       vW = new LorentzVector(); 
+LorentzVector      vQ2 = new LorentzVector();
+
+// Read the first event and reset to the begining of the file
+
+reader.getEvent(event,0); 
+  
+while(reader.hasNext()==true){
+     reader.nextEvent(event);
+     event.read(particles);
+     if(particles.getRows()>0){
+         int pid = particles.getInt("pid",0);
+         if(pid==11){
+            electron.setPxPyPzM(
+                particles.getFloat("px",0), 
+                particles.getFloat("py",0),
+                particles.getFloat("pz",0),
+                0.0005
+                );
+             
+            vW.copy(vBeam);
+            vW.add(vTarget);
+            vW.sub(electron);
+             
+            vQ2.copy(vBeam);
+            vQ2.sub(electron);
+             
+            hQ2&W.fill(vW.mass());
+            hQ2&W.fill(-vQ2.mass2());
+         }
+     }
+}
+  
+ec.cd(0).draw(hQ2&W);
