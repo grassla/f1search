@@ -24,10 +24,10 @@ int eventCounter  = 0;
 
 H1F    hf1 = new H1F("hf1"   ,100,0.00, 2.00); // histogram range in GeV
 H1F hf1vec = new H1F("hf1vec",100,0.00, 2.00); https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_-_Java_Analysis_Tools_Examples
-H1F    hf1 = new H1F("h1"   ,100,0.00, 2.00);
-H1F    hf1 = new H1F("h2"   ,100,0.00, 2.00);
-H1F    hf1 = new H1F("h3"   ,100,0.00, 2.00);
-H1F    hf1 = new H1F("h4"   ,100,0.00, 2.00);
+H1F    h1 = new H1F("h1"   ,100,0.00, 2.00);
+H1F    h2 = new H1F("h2"   ,100,0.00, 2.00);
+H1F    h3 = new H1F("h3"   ,100,0.00, 2.00);
+H1F    h4 = new H1F("h4"   ,100,0.00, 2.00);
 
   
 while(reader.hasNext()==true){
