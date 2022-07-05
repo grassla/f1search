@@ -1,0 +1,102 @@
+import org.jlab.jnp.hipo4.io.*; 
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+HipoReader reader = new HipoReader(); 
+reader.open("coatjava/bin/SimOuts.hipo"); 
+ 
+Event     event = new Event(); 
+Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
+
+EventFilter  eventFilter = new EventFilter("11:211:211:-211:-211:X+:X-:Xn");
+
+reader.getEvent(event,0); 
+int filterCounter = 0;
+int eventCounter  = 0;
+
+H1F    hf1 = new H1F("hf1"   ,100,0.00, 2.00); // histogram range in GeV
+H1F hf1vec = new H1F("hf1vec",100,0.00, 2.00); https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_-_Java_Analysis_Tools_Examples
+H1F    h1 = new H1F("h1"   ,100,0.00, 2.00);
+H1F    h2 = new H1F("h2"   ,100,0.00, 2.00);
+H1F    h3 = new H1F("h3"   ,100,0.00, 2.00);
+H1F    h4 = new H1F("h4"   ,100,0.00, 2.00);
+H2F    hA = new H2F("hA"   ,100,0.00, 2.00, 100,0.00, 2.00);
+H2F    hB = new H2F("hB"   ,100,0.00, 2.00, 100,0.00, 2.00);
+
+  
+while(reader.hasNext()==true){
+      
+     reader.nextEvent(event); // read the event object
+     event.read(particles);   // read particles bank from the event
+     
+     // Data manages creates a physics event with beam energy 10.6 GeV
+     // and from particles bank for reconstructed particles info
+     PhysicsEvent physEvent = DataManager.getPhysicsEvent(10.6,particles);
+     
+     // check if event passes the filter 
+     if(eventFilter.isValid(physEvent)==true){
+         filterCounter++;
+         
+         // The particle Lorentz vector is constructed by adding
+         // four pions lorentz vectors 
+         // [211,0] - first pi+ (or 0'th)
+         // [211,1] - second pi+ (or index 1)
+         Particle f1 = physEvent.getParticle("[211,0]+[211,1]+[-211,0]+[-211,1]"); 
+         hf1.fill(f1.mass());
+         Particle 1 = physEvent.getParticle("[211,0]+[-211,0]");   
+         h1.fill(1.mass());
+         Particle 2 = physEvent.getParticle("[211,1]+[-211,0]");   
+         h2.fill(2.mass());
+         Particle 3 = physEvent.getParticle("[211,0]+[-211,1]");   
+         h3.fill(3.mass());
+         Particle 4 = physEvent.getParticle("[211,1]+[-211,1]");   
+         h4.fill(4.mass());
+         
+         hA.fill(3.mass(), 4.mass());
+         hB.fill(1.mass() ,2.mass())
+         
+     }
+     eventCounter++;
+}
+System.out.println("analyzed " + eventCounter + " events. # passed filter = " + filterCounter);
+
+// Create the canvas with 6 pads and draw the histograms
+TCanvas ec = new TCanvas("ec",2000,1000);
+ 
+  
+hf1.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
+hf1.setTitleY("Counts");
+hf1vec.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
+hf1vec.setTitleY("Counts"); 
+h1.setTitleX("M(#pi+0#pi-0) [GeV]"); 
+h1.setTitleY("Counts");
+h2.setTitleX("M(#pi+1#pi-0) [GeV]"); 
+h2.setTitleY("Counts");
+h3.setTitleX("M(#pi+0#pi-1) [GeV]"); 
+h3.setTitleY("Counts");
+h4.setTitleX("M(#pi+1#pi-1) [GeV]"); 
+h4.setTitleY("Counts");
+hA.setTitleX("M(3) [GeV]"); 
+hA.setTitleY("M(4) [GeV]");
+hB.setTitleX("M(1) [GeV]"); 
+hB.setTitleY("M(2) [GeV]");
+ 
+ec.divide(9,1); 
+ec.cd(0).draw(hf1);
+ec.cd(1).draw(hf1vec);
+ec.cd(2).draw(1);
+ec.cd(3).draw(2);
+ec.cd(4).draw(3);
+ec.cd(5).draw(4);
+ec.cd(6).draw(A);
+ec.cd(7).draw(B);
+
+// DATAMANAGER????
