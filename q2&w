@@ -1,18 +1,14 @@
+import org.jlab.jnp.hipo4.io.*; 
+import org.jlab.jnp.hipo4.data.*;
 import org.jlab.groot.data.*;
 import org.jlab.groot.graphics.*;
 import org.jlab.groot.math.*;
 import org.jlab.groot.ui.*;
-
-//---- imports for HIPO4 library
-import org.jlab.jnp.hipo4.io.*; 
-import org.jlab.jnp.hipo4.data.*;
-
-//---- imports for GROOT library
-import org.jlab.groot.data.*;
-import org.jlab.groot.graphics.*;
-
-//---- imports for PHYSICS library
 import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
   
 // Create the reader and load in the file
 
