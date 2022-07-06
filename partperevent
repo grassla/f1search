@@ -1,0 +1,58 @@
+int matches = 0;
+
+//HIPO4 library imports
+import org.jlab.jnp.hipo4.io.*;
+import org.jlab.jnp.hipo4.data.*;
+
+HipoReader reader = new HipoReader();
+reader.open("coatjava/bin/SimOuts.hipo");
+
+SchemaFactory factory = reader.getSchemaFactory();
+factory.show();
+Bank particles = new Bank(factory.getSchema("REC::Particle"));
+Event     event = new Event();
+
+int eventCounter  = 0;
+
+H1F  hpospion = new H1F("pospion",200,0.5, 5.0);
+H1F  hnegpion = new H1F("negpion",200,0.5, 5.0);
+H1F  helectron = new H1F("electron",200,0.5, 5.0);
+
+reader.getEvent(event,0);
+while(reader.hasNext()==true){
+      reader.nextEvent(event);
+      event.read(particles);
+      int electrons = 0;
+      int pos_pion = 0;
+      int neg_pion = 0;
+      if(particles.getRows()>0){
+          for(int row = 0; row < particles.getRows(); row++){
+              int pid = particles.getInt("pid",row);
+              if(pid == 11) electrons++;
+                helectron.fill(electrons);
+              if(pid == 211) pos_pion++;
+                hpospion.fill(pos_pion);
+              if(pid == -211) neg_pion++;
+                hnegpion.fill(neg_pion);
+           }
+           if(electrons>=1&&pos_pion>=2&&neg_pion>=2){
+              matches++;
+              particles.show();
+           }
+      }
+      eventCounter++;
+}
+
+System.out.println("analyzed " + eventCounter + " events. # passed filter = " + matches);
+System.out.println("+ pions passed filter = " + pos_pion + "- pions passed filter = " + neg_pion + "electrons passed filter = " electrons);
+
+
+electron.setTitleX("number electron");
+pospion.setTitleX("number pospion");
+negpion.setTitleX("number negpion");
+
+ec.divide(3,1);
+
+ec.cd(0).draw(electron);
+ec.cd(1).draw(pospion);
+ec.cd(2).draw(negpion);
