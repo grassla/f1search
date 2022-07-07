@@ -22,6 +22,30 @@ reader.getEvent(event,0);
 int filterCounter = 0;
 int eventCounter  = 0;
 
+H1F    hf1 = new H1F("hf1"   ,100,0.00, 2.00); // histogram range in GeVimport org.jlab.jnp.hipo4.io.*; 
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+HipoReader reader = new HipoReader(); 
+reader.open("coatjava/bin/SimOuts.hipo"); 
+ 
+Event     event = new Event(); 
+Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
+
+EventFilter  eventFilter = new EventFilter("11:211:211:-211:-211:X+:X-:Xn");
+
+reader.getEvent(event,0); 
+int filterCounter = 0;
+int eventCounter  = 0;
+
 H1F    hf1 = new H1F("hf1"   ,100,0.00, 2.00); // histogram range in GeV
 H1F hf1vec = new H1F("hf1vec",100,0.00, 2.00); https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_-_Java_Analysis_Tools_Examples
   
@@ -70,6 +94,65 @@ System.out.println("analyzed " + eventCounter + " events. # passed filter = " + 
 
 // Create the canvas with 2 pads and draw the histograms
 TCanvas ec = new TCanvas("ec",800,400);
+ 
+  
+hf1.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
+hf1.setTitleY("Counts");
+hf1vec.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
+hf1vec.setTitleY("Counts"); 
+ 
+ec.divide(2,1); 
+ec.cd(0).draw(hf1);
+ec.cd(1).draw(hf1vec);
+
+
+// DATAMANAGER????
+H1F hf1vec = new H1F("hf1vec",100,0.00, 2.00); https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_-_Java_Analysis_Tools_Examples
+
+TCanvas ec = new TCanvas("ec",800,400);
+
+while(reader.hasNext()==true){
+      
+     reader.nextEvent(event); // read the event object
+     event.read(particles);   // read particles bank from the event
+     
+     // Data manages creates a physics event with beam energy 10.6 GeV
+     // and from particles bank for reconstructed particles info
+     PhysicsEvent physEvent = DataManager.getPhysicsEvent(10.6,particles);
+     
+     // check if event passes the filter 
+     if(eventFilter.isValid(physEvent)==true){
+         filterCounter++;
+         
+         // The particle Lorentz vector is constructed by adding
+         // four pions lorentz vectors 
+         // [211,0] - first pi+ (or 0'th)
+         // [211,1] - second pi+ (or index 1)
+         Particle f1 = physEvent.getParticle("[211,0]+[211,1]+[-211,0]+[-211,1]"); 
+         hf1.fill(f1.mass());
+         
+         
+         
+         
+         // This is another way that invariant mass can be calculated
+         // Get particles one by one, and add their lorentz vectors
+         // Particle pi+0 = physEvent.getParticleByPid(211,0); 
+         // Particle pi+1 = physEvent.getParticleByPid(211,1); 
+         // Particle pi-0 = physEvent.getParticleByPid(-211,0); 
+         // Particle pi-1 = physEvent.getParticleByPid(-211,1); 
+         // LorentzVector vL_f1 = LorentzVector.from(pi+0.vector()); 
+         // vL_f1.add(pi+1.vector()); 
+         // vL_f1.add(pi-0.vector()); 
+         // vL_f1.add(pi-1.vector()); 
+         // hf1vec.fill(vL_f1.mass());
+         
+         
+         
+         
+     }
+     eventCounter++;
+}
+System.out.println("analyzed " + eventCounter + " events. # passed filter = " + filterCounter);
  
   
 hf1.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
