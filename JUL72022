@@ -1,0 +1,119 @@
+import org.jlab.jnp.hipo4.io.*; 
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+HipoReader reader = new HipoReader(); 
+reader.open("coatjava/bin/SimOuts.hipo"); 
+ 
+Event     event = new Event(); 
+Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
+
+reader.getEvent(event,0); 
+int eventCounter  = 0;
+int matches = 0;
+
+H1F    hf1 = new H1F("hf1"   ,100,0.05, 8.00); // histogram range in GeV
+
+LorentzVector  vBeam   = new LorentzVector(0.0,0.0,10.6,10.6);
+LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,0.938);
+LorentzVector velectron = new LorentzVector();
+LorentzVector  vpospi0  = new LorentzVector();
+LorentzVector  vpospi1  = new LorentzVector();
+LorentzVector  vnegpi0  = new LorentzVector();
+LorentzVector  vnegpi1  = new LorentzVector();
+LorentzVector  vf1  = new LorentzVector();
+
+reader.getEvent(event,0);
+
+while(reader.hasNext()==true){      
+     reader.nextEvent(event); // read the event object
+     event.read(particles);   // read particles bank from the event
+      int elec = 0;
+      int pos_pion = 0;
+      int neg_pion = 0;
+      if(particles.getRows()>4){
+          for(int row = 0; row < particles.getRows(); row++){
+              int pid = particles.getInt("pid",row);
+              if(pid == 11){
+                  elec++;
+                  velectron.setPxPyPzM(
+                  particles.getFloat("px",0), 
+                  particles.getFloat("py",0),
+                  particles.getFloat("pz",0),
+                  0.0005
+                  );
+              }    
+              if(pid == 211){ 
+                  pos_pion++;
+                  if(pos_pion==1){
+                      vpospi0.setPxPyPzM(
+                      particles.getFloat("px",0), 
+                      particles.getFloat("py",0),
+                      particles.getFloat("pz",0),
+                      0.1396
+                      );
+                  }
+                  if(pos_pion==2){
+                      vpospi1.setPxPyPzM(
+                      particles.getFloat("px",0), 
+                      particles.getFloat("py",0),
+                      particles.getFloat("pz",0),
+                      0.1396
+                      );
+                  }
+              }    
+              if(pid == -211){
+                  neg_pion++;
+                  if(neg_pion==1){
+                      vnegpi0.setPxPyPzM(
+                      particles.getFloat("px",0), 
+                      particles.getFloat("py",0),
+                      particles.getFloat("pz",0),
+                      0.1396
+                      );
+                  }
+                  if(neg_pion==2){
+                      vnegpi1.setPxPyPzM(
+                      particles.getFloat("px",0), 
+                      particles.getFloat("py",0),
+                      particles.getFloat("pz",0),
+                      0.1396
+                      );
+                  }
+              }
+           }
+           if(elec>=1&&pos_pion>=2&&neg_pion>=2){
+              matches++;
+              particles.show();
+              vf1.copy(vpospi0);
+              vf1.add(vpospi1);
+              vf1.add(vnegpi0);
+              vf1.add(vnegpi1);
+             
+              hf1.fill(vf1.mass());
+              System.out.printf("Matches: %d%n", matches);
+           }
+      }
+     eventCounter++;
+}
+ 
+  
+hf1.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
+hf1.setTitleY("Counts");
+
+TCanvas ec = new TCanvas("ec",800,800);
+
+ 
+ec.draw(hf1);
+
+
+
+// DATAMANAGER????
