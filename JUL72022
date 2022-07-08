@@ -40,7 +40,7 @@ while(reader.hasNext()==true){
       int pos_pion = 0;
       int neg_pion = 0;
       if(particles.getRows()>4){
-          for(int row = 0; row < particles.getRows(); row++){
+          for(int row = row; row < particles.getRows(); row++){
               int pid = particles.getInt("pid",row);
               if(pid == 11){
                   elec++;
