@@ -297,8 +297,8 @@ hpos1neg1.setTitleY("Counts");
 TCanvas ec = new TCanvas("ec",1600,1200);
 
 ec.divide(6,1);
-ec.cd(0)draw(hf1);
-ec.cd(1)draw(hpos0neg0);
-ec.cd(2)draw(hpos1neg0);
-ec.cd(3)draw(hpos0neg1);
-ec.cd(4)draw(hpos1neg1);
+ec.cd(0).draw(hf1);
+ec.cd(1).draw(hpos0neg0);
+ec.cd(2).draw(hpos1neg0);
+ec.cd(3).draw(hpos0neg1);
+ec.cd(4).draw(hpos1neg1);
