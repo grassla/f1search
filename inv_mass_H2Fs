@@ -117,7 +117,8 @@ while(reader.hasNext()==true){
               vpos1neg1.add(vnegpi1);
              
               hf1.fill(vf1.mass());
-              h01v11.fill(v
+              h01v11.fill(vpos0neg1.mass(), vpos1neg1.mass());
+              h00v10.fill(vpos0neg0.mass(), vpos1neg0.mass());
               
               System.out.printf("Matches: %d%n", matches);
            }
@@ -129,23 +130,16 @@ while(reader.hasNext()==true){
 hf1.setTitleX("M(#pi+#pi+#pi-#pi-) [GeV]"); 
 hf1.setTitleY("Counts");
 
-hpos0neg0.setTitleX("M(#pi+ 0#pi- 0) [GeV]"); 
-hpos0neg0.setTitleY("Counts");
+hpos0neg0.setTitleX("#pi+0#pi-1"); 
+hpos0neg0.setTitleY("#pi+1#pi-1");
 
-hpos1neg0.setTitleX("M(#pi+ 1#pi- 0) [GeV]"); 
-hpos1neg0.setTitleY("Counts");
-
-hpos0neg1.setTitleX("M(#pi+ 0#pi- 1) [GeV]"); 
-hpos0neg1.setTitleY("Counts");
-
-hpos1neg1.setTitleX("M(#pi+ 1#pi- 1) [GeV]"); 
-hpos1neg1.setTitleY("Counts");
+hpos1neg0.setTitleX("#pi+0#pi-0"); 
+hpos1neg0.setTitleY("#pi+1#pi-0");
 
 TCanvas ec = new TCanvas("ec",1600,1200);
 
-ec.divide(5,1);
+ec.divide(3,1);
 ec.cd(0)draw(hf1);
-ec.cd(1)draw(hpos0neg0);
-ec.cd(2)draw(hpos1neg0);
-ec.cd(3)draw(hpos0neg1);
-ec.cd(4)draw(hpos1neg1);
+ec.cd(1)draw(h01v11);
+ec.cd(2)draw(h00v10);
+
