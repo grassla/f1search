@@ -108,15 +108,19 @@ while(reader.hasNext()==true){
               
               vpos0neg0.copy(vpospi0);
               vpos0neg0.add(vnegpi0);
+              hpos0neg0.fill(vpos0neg0.mass());
               
               vpos1neg0.copy(vpospi1);
               vpos1neg0.add(vnegpi0);
+              hpos1neg0.fill(vpos1neg0.mass());
               
               vpos0neg1.copy(vpospi0);
               vpos0neg1.add(vnegpi1);
+              hpos0neg1.fill(vpos0neg1.mass());
               
               vpos1neg1.copy(vpospi1);
               vpos1neg1.add(vnegpi1);
+              hpos1neg1.fill(vpos1neg1.mass());
              
               hf1.fill(vf1.mass());
               
