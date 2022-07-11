@@ -18,8 +18,8 @@ Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"))
 
 H1F  hW = new H1F("hW" ,100, 0.5, 8.0);
 H1F hQ2 = new H1F("hQ2",100, 0.1, 8.0);
-H1F htheta = new H1F("Theta", 360, 0.1, 1.0);
-H1F hphi = new H1F("Phi", 360, 0.1, 1.0);
+H1F htheta = new H1F("htheta", 360, 0.1, 1.0);
+H1F hphi = new H1F("hphi", 360, 0.1, 1.0);
 hW.setTitleX("W [GeV]");
 hQ2.setTitleX("Q^2 [GeV/c^2]");
 htheta.setTitleX("Theta [Degrees]");
