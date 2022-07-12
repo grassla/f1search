@@ -79,6 +79,10 @@ while(reader.hasNext()==true){
              
             hW.fill(vW.mass());
             hQ2.fill(-vQ2.mass2());
+            Math.toDegrees(electron.theta());
+            hthetha.fill(electron.theta());
+            Math.toDegrees(electron.phi());
+            hphi.fill(electron.phi());
          }
      }
 }
