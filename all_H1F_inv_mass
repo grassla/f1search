@@ -37,7 +37,7 @@ LorentzVector  vf1  = new LorentzVector();
 LorentzVector  vpos0neg0  = new LorentzVector();
 LorentzVector  vpos0neg1  = new LorentzVector();
 LorentzVector  vpos1neg0  = new LorentzVector();
-LorentzVector  vfpos1neg1  = new LorentzVector();
+LorentzVector  vpos1neg1  = new LorentzVector();
 
 reader.getEvent(event,0);
 
@@ -149,8 +149,8 @@ hpos1neg1.setTitleY("Counts");
 TCanvas ec = new TCanvas("ec",1600,1200);
 
 ec.divide(5,1);
-ec.cd(0)draw(hf1);
-ec.cd(1)draw(hpos0neg0);
-ec.cd(2)draw(hpos1neg0);
-ec.cd(3)draw(hpos0neg1);
-ec.cd(4)draw(hpos1neg1);
+ec.cd(0).draw(hf1);
+ec.cd(1).draw(hpos0neg0);
+ec.cd(2).draw(hpos1neg0);
+ec.cd(3).draw(hpos0neg1);
+ec.cd(4).draw(hpos1neg1);
