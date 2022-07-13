@@ -21,8 +21,8 @@ int eventCounter  = 0;
 int matches = 0;
 
 H1F    hf1 = new H1F("hf1"   ,100,0.05, 8.00);
-H2F    h01v11 = new H2F("h01v11"   ,100,0.05, 8.00);
-H2F    h00v10 = new H2F("h00v10"   ,100,0.05, 8.00);
+H2F    h01v11 = new H2F("h01v11"   ,100,0.05, 8.00, 100, 0.05, 8.00);
+H2F    h00v10 = new H2F("h00v10"   ,100,0.05, 8.00, 100, 0.05, 8.00);
 
 LorentzVector  vBeam   = new LorentzVector(0.0,0.0,10.6,10.6);
 LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,0.938);
@@ -139,7 +139,7 @@ hpos1neg0.setTitleY("#pi+1#pi-0");
 TCanvas ec = new TCanvas("ec",1600,1200);
 
 ec.divide(3,1);
-ec.cd(0)draw(hf1);
-ec.cd(1)draw(h01v11);
-ec.cd(2)draw(h00v10);
+ec.cd(0).draw(hf1);
+ec.cd(1).draw(h01v11);
+ec.cd(2).draw(h00v10);
 
