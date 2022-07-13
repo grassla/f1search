@@ -16,7 +16,7 @@ reader.open("coatjava/bin/SimOuts.hipo");
 Event     event = new Event(); 
 Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
  
-H2F  hQ2&W = new H2F("hQ2&W" , 100, 0.5, 8.0, 100, 0.5, 8.0);
+H2F  hQ2vW = new H2F("hQ2vW" , 100, 0.5, 8.0, 100, 0.5, 8.0);
 hQ2&W.setTitleX("W [GeV]");
 hQ2&W.setTitleY("Q^2 [GeV/c^2]");
   
@@ -70,10 +70,10 @@ while(reader.hasNext()==true){
             vQ2.copy(vBeam);
             vQ2.sub(electron);
              
-            hQ2&W.fill(vW.mass(),-vQ2.mass());
+            hQ2vW.fill(vW.mass(),-vQ2.mass());
          }
      }
 }
   
   
-ec.draw(hQ2&W);
+ec.draw(hQ2vW);
