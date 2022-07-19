@@ -1,8 +1,8 @@
-int type1pos = 0
-int type1neg = 0
-int notfinalpos = 0
-int notfinalneg = 0
-int matches = 0
+int type1pos = 0;
+int type1neg = 0;
+int notfinalpos = 0;
+int notfinalneg = 0;
+int matches = 0;
 
 
 import org.jlab.jnp.hipo4.io.*;
@@ -31,7 +31,7 @@ while(reader.hasNext()==true){
       int electron = 0;
       int pos_pion = 0;
       int neg_pion = 0;
-      if(particles.getRows()>0){
+      if(particles.getRows()>4){
           for(int row = 0; row < particles.getRows(); row++){
               int pid = particles.getInt("pid",row);
               if(pid == 11)  { 
@@ -45,11 +45,11 @@ while(reader.hasNext()==true){
               }
            }
            if(electron>=1&&pos_pion>=2&&neg_pion>=2){
-            int matches++;
+            matches++;
             for(int row = 0; row < particles.getRows(); row++){
               int pid = particles.getInt("pid",row);
               int type = particles.getInt("type",row);
-              particles.show();
+              // particles.show();
               if(pos_pion>=1) {
                 if(type==1) {
                   type1pos++;
