@@ -22,8 +22,8 @@ H1F htheta = new H1F("htheta", 360, 0.1, 1.0);
 H1F hphi = new H1F("hphi", 360, 0.1, 1.0);
 hW.setTitleX("W [GeV]");
 hQ2.setTitleX("Q^2 [GeV/c^2]");
-htheta.setTitleX("Theta [Degrees]");
-hphi.setTitleX("Phi [Degrees]");
+htheta.setTitleX("Theta [rad]");
+hphi.setTitleX("Phi [rad]");
   
 TCanvas ec = new TCanvas("ec",1200,1200);
 
@@ -80,12 +80,13 @@ while(reader.hasNext()==true){
             hW.fill(vW.mass());
             hQ2.fill(-vQ2.mass2());
             Math.toDegrees(electron.theta());
-            hthetha.fill(electron.theta());
+            htheta.fill(electron.theta());
             Math.toDegrees(electron.phi());
             hphi.fill(electron.phi());
          }
      }
 }
+
   
 ec.divide(2,2);
   
