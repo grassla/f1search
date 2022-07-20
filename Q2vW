@@ -17,8 +17,8 @@ Event     event = new Event();
 Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
  
 H2F  hQ2vW = new H2F("hQ2vW" , 100, 0.5, 8.0, 100, 0.5, 8.0);
-hQ2&W.setTitleX("W [GeV]");
-hQ2&W.setTitleY("Q^2 [GeV/c^2]");
+hQ2vW.setTitleX("W [GeV]");
+hQ2vW.setTitleY("Q^2 [GeV/c^2]");
   
 TCanvas ec = new TCanvas("ec",800,800);
 
