@@ -30,22 +30,15 @@ while(reader.hasNext()==true){
           for(int row = 0; row < particles.getRows(); row++){
               int pid = particles.getInt("pid",row);
               byte type = particles.getByte("type",row);
-              byte parent = particles.getByte("parent",row);
-              int parentpid = particles.getInt("pid",parent);
-              byte parentype = type(parent);
+              int index = particles.getInt("index",row);
               // particles.show();
               if(pid==211) {
-                  if(parenttype==1) {
-                      System.out.pintln("pospi comes from parent " + parentpid);
-                  } else {
-                    parentpid = parentpid0;
-                    parentpid = parent(parentpid0);
-                    System.out.println("pospi comes from parent " + parentpid0 + "which comes from " + parentpid);
-                  }
+                  System.out.println("index " + index + "type " + type);
+                  } 
            }
        }
 if(counter==10){
   break; 
 }
 }
-}
+
