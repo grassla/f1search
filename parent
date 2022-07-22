@@ -1,16 +1,3 @@
-int counter = 0;
-int pidcounter = 0;
-int matches = 0;
-
-public class GFG {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-    public static void main(String[] args)
-    {
-    
 import org.jlab.jnp.hipo4.io.*;
 import org.jlab.jnp.hipo4.data.*;
 import org.jlab.groot.data.*;
@@ -22,6 +9,11 @@ import org.jlab.clas.physics.LorentzVector;
 import org.jlab.clas.physics.PhysicsEvent;
 import org.jlab.clas.physics.Particle;
 import org.jlab.clas.physics.EventFilter;
+
+int counter = 0;
+int pidcounter = 0;
+int matches = 0; 
+
 HipoReader reader = new HipoReader();
 reader.open("coatjava/bin/SimOuts.hipo");
 
@@ -41,23 +33,32 @@ while(reader.hasNext()==true){
           for(int row = 0; row < particles.getRows(); row++){
               int pid = particles.getInt("pid",row);
               byte parent = particles.getByte("parent",row);
+              int parentpid = particles.getInt("pid",parent-1);
               // particles.show();
               if(pid==211||pid==-211) {
-                  pidcounter++;
-                  System.out.println("pid " + pid + " # " + pidcounter + " parent " + parent);
-
-
-                  } 
+                  if(parentpid==20223||parentpid==30113||parentpid==9030113) {
+                    pidcounter++;
+                    System.out.println("pid " + pid + " parent " + parentpid);
+                    System.out.println("F1 ############");
+                    particles.show();
+                  }
+              } 
            }
        } 
-       System.out.println(" " + counter);
-       System.out.println();
-if(counter==10){
-  break; 
+       // System.out.println(" " + counter);
+       // System.out.println();
+
+  
+  
 }
 }
 
 
-20223 //1285
-20333 //1420
-9000223 //1510
+
+
+// 20223 1285
+// 20333 1420
+// 9000223 1510
+
+
+    
