@@ -36,7 +36,7 @@ while(reader.hasNext()==true){
               int parentpid = particles.getInt("pid",parent-1);
               // particles.show();
               if(pid==211||pid==-211) {
-                  // if(parentpid==20223||parentpid==113) {
+                  // if(parentpid==20223||parentpid==113||parentpid==130) {
                     pidcounter++;
                     System.out.println("pid " + pid + " parent " + parentpid);
                     // System.out.println("F1 ############");
