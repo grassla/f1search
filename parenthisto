@@ -18,7 +18,7 @@ reader.open("coatjava/bin/SimOuts.hipo");
 Event     event = new Event(); 
 Bank  particles = new Bank(reader.getSchemaFactory().getSchema("MC::Lund"));
 
-H1F  hpid = new H1F("hpid" ,10000, 10, 8000);
+H1F  hpid = new H1F("hpid" ,30000, 10, 8000);
 hpid.setTitleX("pid");
   
 TCanvas ec = new TCanvas("ec",800,400);
