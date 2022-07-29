@@ -41,6 +41,7 @@ while(reader.hasNext()==true){
               int pid = particles.getInt("pid",row);
               byte parent = particles.getByte("parent",row);
               int parentpid = particles.getInt("pid",parent-1);
+              int grandparent = particles.getInt("parent",parent-1);
               if(pid==211) {
                 pospion++;
                 int pospionparent = particles.getInt("pid",parent-1);
@@ -64,12 +65,13 @@ while(reader.hasNext()==true){
                         ninetwo++; }
                   else if(pospionList.get(i)==113) {
                         onethirteen++;
-                        System.out.println(parentpid);
+                        System.out.println("Rho parent: " + grandparent); 
                         if(parentpid==20223) {
                               System.out.println("F1");
                         }
                   }
                   else {
+                        // System.out.println(parentpid);
                         other++; }
                 }
               }
