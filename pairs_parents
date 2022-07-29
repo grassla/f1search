@@ -24,6 +24,10 @@ int i = 0;
 int j = 0;
 int pospion = 0;
 int negpion = 0;
+int ninetwo = 0;
+int onethirteen = 0;
+int other = 0;
+
 List<Integer> pospionList = new ArrayList<>();
 List<Integer> negpionList = new ArrayList<>();
 
@@ -47,18 +51,32 @@ while(reader.hasNext()==true){
                 int negpionparent = particles.getInt("pid",parent-1);
                 negpionList.add(negpionparent);
               }
-            }
+            
              
             for(i=0; i<pospionList.size(); i++) {
               for(j=0; j<negpionList.size(); j++) {
-                System.out.println(pospionList.get(i) + " " + negpionList.get(j));
-                System.out.println(" ");
+                // System.out.println(pospionList.get(i) + " " + negpionList.get(j));
+                // System.out.println(" ");
                 if(pospionList.get(i)==negpionList.get(j)) {
-                  System.out.println("Matched parent pid: " + pospionList.get(i));
-                  System.out.println(" ");
+                  // System.out.println("Matched parent pid: " + pospionList.get(i));
+                  // System.out.println(" ");
+                  if(pospionList.get(i)==92) {
+                        ninetwo++; }
+                  else if(pospionList.get(i)==113) {
+                        onethirteen++;
+                        System.out.println(parentpid);
+                        if(parentpid==20223) {
+                              System.out.println("F1");
+                        }
+                  }
+                  else {
+                        other++; }
                 }
+              }
               }
             }
        }
 }
-            
+System.out.println("92: " + ninetwo);
+System.out.println("113: " + onethirteen);
+System.out.println("Other: " + other);
