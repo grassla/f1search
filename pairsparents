@@ -1,0 +1,121 @@
+
+
+import org.jlab.jnp.hipo4.io.*;
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+int counter = 0;
+int pidcounter = 0;
+int matches = 0; 
+int ninetwocounter = 0;
+int rhopluscounter = 0;
+int rhominuscounter = 0;
+int omegacounter = 0;
+int rhozerocounter = 0;
+int Kstarcounter = 0;
+int etaprimecounter = 0;
+int Kzeroshortcounter = 0;
+int ximinuscounter = 0;
+int deltazerocounter = 0;
+int deltaminuscounter = 0;
+int protoncounter = 0;
+int lambdacounter = 0;
+int epsilonstarminuscounter = 0;
+int deltapluspluscounter = 0;
+int othercounter = 0;
+
+HipoReader reader = new HipoReader();
+reader.open("coatjava/bin/SimOuts.hipo");
+
+SchemaFactory factory = reader.getSchemaFactory();
+factory.show();
+Bank particles = new Bank(factory.getSchema("MC::Lund"));
+Event     event = new Event();
+reader.getEvent(event,0);
+
+int counter = 0;
+
+while(reader.hasNext()==true){
+      reader.nextEvent(event);
+      event.read(particles);
+      if(particles.getRows()>4){ 
+          counter++;
+          for(int row = 0; row < particles.getRows(); row++){
+              int pid = particles.getInt("pid",row);
+              if(pid==211) {
+                byte posparent = particles.getByte("parent",row);
+                int posparentpid = particles.getInt("pid",posparent-1);
+              
+              if(pid==211) {
+                byte negparent = particles.getByte("parent",row);
+                int negparentpid = particles.getInt("pid",negparent-1);
+              
+              if(posparentpid==negparentpid) {
+                  if(posparentpid==92) {
+                    ninetwocounter++; }
+                  else if(posparentpid==213) {
+                    rhopluscounter++; }
+                  else if(posparentpid==-213) {
+                    rhominuscounter++; }
+                  else if(posparentpid==223) {
+                    omegacounter++; }
+                  else if(posparentpid==113) {
+                    rhozerocounter++; }
+                  else if(posparentpid==323) {
+                    Kstarcounter++; }
+                  else if(posparentpid==331) {
+                    etaprimecounter++; }
+                  else if(posparentpid==310) {
+                    Kzeroshortcounter++; }
+                  else if(posparentpid==3312) {
+                    ximinuscounter++; }
+                  else if(posparentpid==2114) {
+                    deltazerocounter++; }
+                  else if(posparentpid==1114) {
+                    deltaminuscounter++; }
+                  else if(posparentpid==2212) {
+                    protoncounter++; }
+                  else if(posparentpid==3122) {
+                    lambdacounter++; }
+                  else if(posparentpid==3114) {
+                    epsilonstarminuscounter++; }
+                  else if(posparentpid==2224) {
+                    deltapluspluscounter++; }
+                  else {
+                    othercounter++; }
+                    
+                    
+                    
+              }
+              }
+              } 
+           }
+       }
+  
+  
+
+}
+System.out.println("92 " + ninetwocounter);
+System.out.println("113 " + rhozerocounter);
+System.out.println("-213 " + rhominuscounter);
+System.out.println("213 " + rhopluscounter);
+System.out.println("223 " + omegacounter);
+System.out.println("310 " + Kzeroshortcounter);
+System.out.println("323 " + Kstarcounter);
+System.out.println("331 " + etaprimecounter);
+System.out.println("1114 " + deltaminuscounter);
+System.out.println("2114 " + deltazerocounter);
+System.out.println("2212 " + protoncounter);
+System.out.println("2224 " + deltapluspluscounter);
+System.out.println("3114 " + epsilonstarminuscounter);
+System.out.println("3122 " + lambdacounter);
+System.out.println("3312 " + ximinuscounter);
+System.out.println("Other parents " + othercounter);
