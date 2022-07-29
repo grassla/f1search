@@ -27,6 +27,7 @@ int negpion = 0;
 int ninetwo = 0;
 int onethirteen = 0;
 int other = 0;
+int Goodnews = 0;
 
 List<Integer> pospionList = new ArrayList<>();
 List<Integer> negpionList = new ArrayList<>();
@@ -39,46 +40,57 @@ while(reader.hasNext()==true){
       if(particles.getRows()>4){ 
           for(int row = 0; row < particles.getRows(); row++){
               int pid = particles.getInt("pid",row);
-              byte parent = particles.getByte("parent",row);
-              int parentpid = particles.getInt("pid",parent-1);
-              int grandparent = particles.getInt("parent",parent-1);
+              
               if(pid==211) {
-                pospion++;
-                int pospionparent = particles.getInt("pid",parent-1);
-                pospionList.add(pospionparent);
+                pospion++;              
+                pospionList.add(row);
               }
               if(pid==-211) {
                 negpion++;
-                int negpionparent = particles.getInt("pid",parent-1);
-                negpionList.add(negpionparent);
+                negpionList.add(row);
               }
-            
-             
+            }
+            System.out.println("-------------");
+            System.out.println("Size list: " + pospionList.size() + " / " + negpionList.size());
             for(i=0; i<pospionList.size(); i++) {
               for(j=0; j<negpionList.size(); j++) {
-                // System.out.println(pospionList.get(i) + " " + negpionList.get(j));
-                // System.out.println(" ");
-                if(pospionList.get(i)==negpionList.get(j)) {
-                  // System.out.println("Matched parent pid: " + pospionList.get(i));
-                  // System.out.println(" ");
-                  if(pospionList.get(i)==92) {
-                        ninetwo++; }
-                  else if(pospionList.get(i)==113) {
+                byte pospionparent = particles.getByte("parent",pospionList.get(i));
+                byte negpionparent = particles.getByte("parent",negpionList.get(j));
+                int posparentpid = particles.getInt("pid",pospionparent-1);
+                int negparentpid = particles.getInt("pid",negpionparent-1);
+                System.out.println("+ " + posparentpid + " " + "- " + negparentpid);
+                System.out.println(" ");
+                
+                if(pospionparent==negpionparent) {
+                  int parentpid = particles.getInt("pid",pospionparent-1);            
+                  Byte grandparent = particles.getByte("parent",pospionparent-1);
+                  int grandparentpid = particles.getInt("pid",grandparent-1);
+                  System.out.println("Matched parent pid: " +  parentpid);
+                  System.out.println(" ");
+                  if(parentpid==92) {
+                        ninetwo++; 
+                  } else if(parentpid==20223) {
+                        Goodnews++;
+                  } else if(parentpid==113) {
                         onethirteen++;
-                        System.out.println("Rho parent: " + grandparent); 
-                        if(parentpid==20223) {
-                              System.out.println("F1");
+                        System.out.println("Rho parent: " + grandparentpid);
+                        System.out.println(" ");
+                        if(grandparentpid==20223) {
+                              Goodnews++;                              
                         }
-                  }
+                  } 
                   else {
                         // System.out.println(parentpid);
-                        other++; }
+                        other++; 
+                        }
                 }
-              }
               }
             }
        }
 }
+System.out.println("Pion (pair?) parents: ");
 System.out.println("92: " + ninetwo);
 System.out.println("113: " + onethirteen);
 System.out.println("Other: " + other);
+System.out.println("F1 " + Goodnews);
+
