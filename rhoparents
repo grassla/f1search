@@ -1,0 +1,79 @@
+import org.jlab.jnp.hipo4.io.*;
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+HipoReader reader = new HipoReader();
+reader.open("coatjava/bin/SimOuts.hipo");
+
+SchemaFactory factory = reader.getSchemaFactory();
+factory.show();
+Bank particles = new Bank(factory.getSchema("MC::Lund"));
+Event     event = new Event();
+reader.getEvent(event,0);
+
+int counter = 0;
+int i = 0;
+int j = 0;
+int pospion = 0;
+int negpion = 0;
+int Goodnews = 0;
+
+List<Integer> pospionList = new ArrayList<>();
+List<Integer> negpionList = new ArrayList<>();
+
+while(reader.hasNext()==true){
+      pospionList.clear();
+      negpionList.clear();
+      reader.nextEvent(event);
+      event.read(particles);
+      if(particles.getRows()>4){ 
+          for(int row = 0; row < particles.getRows(); row++){
+              int pid = particles.getInt("pid",row);
+              
+              if(pid==211) {
+                pospion++;              
+                pospionList.add(row);
+              }
+              if(pid==-211) {
+                negpion++;
+                negpionList.add(row);
+              }
+            }
+            for(i=0; i<pospionList.size(); i++) {
+              for(j=0; j<negpionList.size(); j++) {
+                byte pospionparent = particles.getByte("parent",pospionList.get(i));
+                byte negpionparent = particles.getByte("parent",negpionList.get(j));
+                int posparentpid = particles.getInt("pid",pospionparent-1);
+                int negparentpid = particles.getInt("pid",negpionparent-1);
+                
+                if(pospionparent==negpionparent) {
+                  int parentpid = particles.getInt("pid",pospionparent-1);            
+                  Byte grandparent = particles.getByte("parent",pospionparent-1);
+                  int grandparentpid = particles.getInt("pid",grandparent-1);
+                  if(parentpid==113) {
+                        onethirteen++;
+                        if(grandparentpid!=92) {
+                          System.out.println("Rho parent: " + grandparentpid);
+                          System.out.println(" ");
+                        }
+                        if(grandparentpid==20223) {
+                              Goodnews++;                              
+                        }
+                  } 
+
+                }
+              }
+            }
+       }
+}
+
+System.out.println("F1 " + Goodnews);
+
