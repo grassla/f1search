@@ -19,6 +19,8 @@ Bank particles = new Bank(factory.getSchema("MC::Lund"));
 Event     event = new Event();
 reader.getEvent(event,0);
 
+H1F    hrhoparent = new H1F("hrhoparent"   ,10000,5.0, 2500);
+
 int counter = 0;
 int i = 0;
 int j = 0;
@@ -63,7 +65,10 @@ while(reader.hasNext()==true){
                         if(grandparentpid!=92) {
                           System.out.println("Rho parent: " + grandparentpid);
                           System.out.println(" ");
-                        }
+                          hrhoparent.fill(grandparentpid);
+                        }import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
                         if(grandparentpid==20223) {
                               Goodnews++;                              
                         }
@@ -74,6 +79,9 @@ while(reader.hasNext()==true){
             }
        }
 }
-
+TCanvas ec = new TCanvas("ec",1600,1200);
+hrhoparent.setTitleX("rho parent pid");
+hrhoparent.setTitleY("Count");
+ec.cd(0).draw(hrhoparent);
 System.out.println("F1 " + Goodnews);
 
