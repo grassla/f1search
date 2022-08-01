@@ -12,6 +12,9 @@ import org.jlab.clas.physics.PhysicsEvent;
 import org.jlab.clas.physics.Particle;
 import org.jlab.clas.physics.EventFilter;
 
+
+H1F    hpairsparent = new H1F("hpairsparent"   ,4000,-4000, 2500);
+
 int counter = 0;
 int pidcounter = 0;
 int matches = 0; 
@@ -59,6 +62,7 @@ while(reader.hasNext()==true){
                 int negparentpid = particles.getInt("pid",negparent-1);
               
               if(posparentpid==negparentpid) {
+                  hpairsparent.fill(posparentpid);
                   if(posparentpid==92) {
                     ninetwocounter++; }
                   else if(posparentpid==213) {
@@ -120,3 +124,9 @@ System.out.println("3114 " + epsilonstarminuscounter);
 System.out.println("3122 " + lambdacounter);
 System.out.println("3312 " + ximinuscounter);
 System.out.println("Other parents " + othercounter);
+
+
+TCanvas ec = new TCanvas("ec",1600,1200);
+hpairsparent.setTitleX("pairs parent pid");
+hpairsparent.setTitleY("Count");
+ec.cd(0).draw(hpairsparent);
