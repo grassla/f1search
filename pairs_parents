@@ -19,6 +19,10 @@ Bank particles = new Bank(factory.getSchema("MC::Lund"));
 Event     event = new Event();
 reader.getEvent(event,0);
 
+
+H1F    hpairsparent = new H1F("hpairsparent"   ,4000,-4000, 2500);
+H1F    hrhoparent = new H1F("hrhoparent"  ,4000,-4000, 2500);
+
 int counter = 0;
 int i = 0;
 int j = 0;
@@ -62,6 +66,7 @@ while(reader.hasNext()==true){
                 System.out.println(" ");
                 
                 if(pospionparent==negpionparent) {
+                  hpairsparent.fill(pospionparent);
                   int parentpid = particles.getInt("pid",pospionparent-1);            
                   Byte grandparent = particles.getByte("parent",pospionparent-1);
                   int grandparentpid = particles.getInt("pid",grandparent-1);
@@ -72,6 +77,7 @@ while(reader.hasNext()==true){
                   } else if(parentpid==20223) {
                         Goodnews++;
                   } else if(parentpid==113) {
+                        hrhoparent.fill(grandparentpid);
                         onethirteen++;
                         System.out.println("Rho parent: " + grandparentpid);
                         System.out.println(" ");
@@ -94,3 +100,10 @@ System.out.println("113: " + onethirteen);
 System.out.println("Other: " + other);
 System.out.println("F1 " + Goodnews);
 
+TCanvas ec = new TCanvas("ec",1200,800);
+hpairsparent.setTitleX("pairs parent pid");
+hpairsparent.setTitleY("Count");
+hrhoparent.setTitleX("rho parent pid");
+hrhoparent.setTitleY("Count");
+ec.divide(2,1);
+ec.cd(0).draw(hpairsparent);
