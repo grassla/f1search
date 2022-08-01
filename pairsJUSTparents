@@ -90,6 +90,7 @@ while(reader.hasNext()==true){
                   else if(posparentpid==2224) {
                     deltapluspluscounter++; }
                   else {
+                    // System.out.println(posparentpid);
                     othercounter++; }
                     
                     
