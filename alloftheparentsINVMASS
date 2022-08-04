@@ -1,0 +1,134 @@
+import org.jlab.jnp.hipo4.io.*;
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+HipoReader reader = new HipoReader();
+reader.open("coatjava/bin/SimOuts.hipo");
+
+SchemaFactory factory = reader.getSchemaFactory();
+factory.show();
+Bank particles = new Bank(factory.getSchema("MC::Lund"));
+Event     event = new Event();
+reader.getEvent(event,0);
+
+
+H1F    hposvneg = new H1F("posvneg"   ,200,0.00, 1.00);
+H1F    hrhoparent = new H1F("hrhoparent"  ,200,0.00, 1.00);
+H1F    hkzeroshortparent = new H1F("hkzeroshortparent"  ,200,0.00, 1.00);
+H1F    hrhograndparent = new H1F("hrhograndparent"  ,200,0.00, 1.00);
+H1F    homegaparent = new H1F("homegaparent"  ,200,0.00, 1.00);
+H1F    hetaparent = new H1F("hetaparent"  ,200,0.00, 1.00);
+
+int counter = 0;
+int i = 0;
+int j = 0;
+int pospion = 0;
+int negpion = 0;
+int elec = 0;
+
+LorentzVector  vBeam   = new LorentzVector(0.0,0.0,10.6,10.6);
+LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,0.938);
+LorentzVector velectron = new LorentzVector();
+LorentzVector  vposvneg  = new LorentzVector();
+LorentzVector  vpospi  = new LorentzVector();
+LorentzVector  vnegpi  = new LorentzVector();
+
+List<Integer> pospionList = new ArrayList<>();
+List<Integer> negpionList = new ArrayList<>();
+
+while(reader.hasNext()==true){
+      pospionList.clear();
+      negpionList.clear();
+      reader.nextEvent(event);
+      event.read(particles);
+      if(particles.getRows()>4){ 
+          for(int row = 0; row < particles.getRows(); row++){
+              int pid = particles.getInt("pid",row);
+              
+              if(pid==211) {
+                pospion++;              
+                pospionList.add(row);
+              }
+              if(pid==-211) {
+                negpion++;
+                negpionList.add(row);
+              }
+              if(pid==11) {
+                elec++;
+              }
+            }
+            for(i=0; i<pospionList.size(); i++) {
+              for(j=0; j<negpionList.size(); j++) {
+                byte pospionparent = particles.getByte("parent",pospionList.get(i));
+                byte negpionparent = particles.getByte("parent",negpionList.get(j));
+                int posparentpid = particles.getInt("pid",pospionparent-1);
+                int negparentpid = particles.getInt("pid",negpionparent-1);
+                
+                if(pospionparent==negpionparent) {
+                  hpairsparent.fill(pospionparent);
+                  int parentpid = particles.getInt("pid",pospionparent-1);            
+                  Byte grandparent = particles.getByte("parent",pospionparent-1);
+                  int grandparentpid = particles.getInt("pid",grandparent-1);
+                  Byte greatgrandparent = particles.getByte("parent",grandparent-1);
+                  int greatgrandparentpid = particles.getInt("pid",greatgrandparent-1);
+                      
+                  vpospi.setPxPyPzM(
+                  particles.getFloat("px",pospionList.get(i)), 
+                  particles.getFloat("py",pospionList.get(i)),
+                  particles.getFloat("pz",pospionList.get(i)),
+                  0.1396
+                  );
+                      
+                  vnegpi.setPxPyPzM(
+                  particles.getFloat("px",negpionList.get(j)), 
+                  particles.getFloat("py",negpionList.get(j)),
+                  particles.getFloat("pz",negpionList.get(j)),
+                  0.1396
+                  );        
+                  
+                  vposvneg.copy(vpospi);
+                  vposvneg.add(vnegpi);
+                  hposvneg.fill(vposvneg.mass());
+                  
+                  if(parentpid==113) {
+                        hrhoparent.fill(vposvneg.mass());
+                  } else if(parentpid==223) {
+                        homegaparent.fill(vposvneg.mass());
+                  } else if(parentpid==221) {
+                        hetaparent.fill(vposvneg.mass());
+                  } else if(parentpid==310) {
+                        hkzeroshortparent.fill(vposvneg.mass());
+                  }
+                  
+                  
+                 
+                }
+              }
+            }
+       }
+}
+
+TCanvas ec = new TCanvas("ec",1200,800);
+hrhoparent.setTitleX("rho parent");
+hrhoparent.setTitleY("Count");
+homegaparent.setTitleX("omega parent");
+homegaparent.setTitleY("Count");
+hetaparent.setTitleX("eta parent");
+hetaparent.setTitleY("Count");
+hkzeroshortparent.setTitleX("K zeroshort parent");
+hkzeroshortparent.setTitleY("Count");
+
+ec.divide(3,2);
+ec.cd(0).draw(hposvneg);
+ec.cd(1).draw(hrhoparent);
+ec.cd(2).draw(hkzeroshortparent);
+ec.cd(3).draw(homegaparent);
+ec.cd(4).draw(hetaparent);
