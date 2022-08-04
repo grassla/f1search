@@ -20,12 +20,12 @@ Event     event = new Event();
 reader.getEvent(event,0);
 
 
-H1F    hpairsparent = new H1F("hpairsparent"   ,4000,-4000, 2500);
-H1F    hrhoparent = new H1F("hrhoparent"  ,4000,-2000, 2500);
-H1F    hkzeroshortparent = new H1F("hkzeroshortparent"  ,4000,-2000, 2500);
-H1F    hrhograndparent = new H1F("hrhograndparent"  ,1000,-1000, 1000);
-H1F    homegaparent = new H1F("homegaparent"  ,4000,-2000, 2500);
-H1F    hetaparent = new H1F("hetaparent"  ,4000,-2000, 2500);
+H1F    hpairsparent = new H1F("hpairsparent"   ,40,0, 25);
+H1F    hrhoparent = new H1F("hrhoparent"  ,10,0, 250);
+H1F    hkzeroshortparent = new H1F("hkzeroshortparent"  ,10,0, 250);
+H1F    hrhograndparent = new H1F("hrhograndparent"  ,10,0, 250);
+H1F    homegaparent = new H1F("homegaparent"  ,10,0, 250);
+H1F    hetaparent = new H1F("hetaparent"  ,10,0, 250);
 
 
 int counter = 0;
