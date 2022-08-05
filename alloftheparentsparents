@@ -22,11 +22,11 @@ reader.getEvent(event,0);
 
 H1F    hpairsparent = new H1F("hpairsparent"   ,40,0, 25);
 H1F    hrhoparent = new H1F("hrhoparent"  ,10,0, 250);
-H1F    hkzeroshortparent = new H1F("hkzeroshortparent"  ,10,0, 250);
+H1F    hkzeroshortparent = new H1F("hkzeroshortparent"  ,10,-350, 350);
 H1F    hrhograndparent = new H1F("hrhograndparent"  ,10,0, 250);
 H1F    homegaparent = new H1F("homegaparent"  ,10,0, 250);
 H1F    hetaparent = new H1F("hetaparent"  ,10,0, 250);
-H1F    hkzeroshortgrandparent = new H1F("hkzeroshortgrandparent"  ,10,0, 250);
+H1F    hkzeroshortgrandparent = new H1F("hkzeroshortgrandparent"  ,10,-350, 350);
 
 
 int counter = 0;
@@ -129,6 +129,7 @@ System.out.println("223 (omega): " + twotwothree);
 System.out.println("221 (eta): " + twotwoone);
 System.out.println("Other: " + other);
 System.out.println("F1 " + Goodnews);
+
 
 TCanvas ec = new TCanvas("ec",1200,800);
 hpairsparent.setTitleX("pairs parent pid");
