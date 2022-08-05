@@ -26,6 +26,7 @@ H1F    hkzeroshortparent = new H1F("hkzeroshortparent"  ,10,0, 250);
 H1F    hrhograndparent = new H1F("hrhograndparent"  ,10,0, 250);
 H1F    homegaparent = new H1F("homegaparent"  ,10,0, 250);
 H1F    hetaparent = new H1F("hetaparent"  ,10,0, 250);
+H1F    hkzeroshortgrandparent = new H1F("hkzeroshortgrandparent"  ,10,0, 250);
 
 
 int counter = 0;
@@ -105,6 +106,8 @@ while(reader.hasNext()==true){
                         threeten++;
                         System.out.println("K ZeroShort parent: " + grandparentpid);
                         System.out.println(" ");
+                        System.out.println("K ZeroShort grandparent: " + greatgrandparentpid);
+                        hkzeroshortgrandparent.fill(greatgrandparentpid);
                         if(grandparentpid==20223) {
                               Goodnews++;                              
                         }
@@ -140,10 +143,13 @@ hkzeroshortparent.setTitleX("K zeroshort parent pid");
 hkzeroshortparent.setTitleY("Count");
 hrhograndparent.setTitleX("rho grandparent pid");
 hrhograndparent.setTitleY("Count");
-ec.divide(3,2);
+hkzeroshortgrandparent.setTitleX("kzeroshort grandparent pid");
+hkzeroshortgrandparent.setTitleY("Count");
+ec.divide(3,3);
 ec.cd(0).draw(hpairsparent);
 ec.cd(1).draw(hrhoparent);
 ec.cd(2).draw(hkzeroshortparent);
 ec.cd(3).draw(homegaparent);
 ec.cd(4).draw(hetaparent);
 ec.cd(5).draw(hrhograndparent);
+ec.cd(6).draw(hkzeroshortgrandparent);
