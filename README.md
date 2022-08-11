@@ -1,4 +1,5 @@
 # f1search
+***Display the Source Blob (<>) for nicer viewing***
 Attempts to locate f1(1285) meson (PDG ID# 20223) through various decay methods.
 
 Simulations (CLAS12 Monte Carlo) used/created from:
@@ -16,7 +17,6 @@ jshell --class-path ~/coatjava/lib/clas/coat-libs-8.0.0-SNAPSHOT.jar:~/coatjava/
 
 
 Contents:
-***Display the Source Blob (<>) for nicer viewing***
 Note that some files are not intended for pion pairs.
 Note all files banks - Most are REC::Particle or MC::Lund.
 
