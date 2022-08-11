@@ -40,7 +40,8 @@ reader.getEvent(event,0);
 int counter = 0;
 int i = 0;
 int j = 0;
-
+int pospion = 0;
+int negpion = 0;
 
 List<Integer> pospionList = new ArrayList<>();
 List<Integer> negpionList = new ArrayList<>();
