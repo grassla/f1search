@@ -1,0 +1,110 @@
+import org.jlab.jnp.hipo4.io.*;
+import org.jlab.jnp.hipo4.data.*;
+import org.jlab.groot.data.*;
+import org.jlab.groot.graphics.*;
+import org.jlab.groot.math.*;
+import org.jlab.groot.ui.*;
+import org.jlab.clas.physics.*;
+import org.jlab.clas.physics.LorentzVector;
+import org.jlab.clas.physics.PhysicsEvent;
+import org.jlab.clas.physics.Particle;
+import org.jlab.clas.physics.EventFilter;
+
+HipoReader reader = new HipoReader();
+reader.open("coatjava/bin/SimOuts.hipo");
+
+SchemaFactory factory = reader.getSchemaFactory();
+factory.show();
+Bank particles = new Bank(factory.getSchema("MC::Lund"));
+Event     event = new Event();
+reader.getEvent(event,0);
+
+
+H1F    hgammas = new H1F("gammas"   ,200,0, 1.5);
+
+int counter = 0;
+int i = 0;
+int j = 0;
+int frompizero = 0;
+int fromother = 0;
+int elec = 0;
+
+LorentzVector  vBeam   = new LorentzVector(0.0,0.0,10.6,10.6);
+LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,0.938);
+LorentzVector velectron = new LorentzVector();
+LorentzVector  vgammas  = new LorentzVector();
+LorentzVector  vfrompizero  = new LorentzVector();
+LorentzVector  vfromother  = new LorentzVector();
+
+List<Integer> frompizeroList = new ArrayList<>();
+List<Integer> fromotherList = new ArrayList<>();
+
+while(reader.hasNext()==true){
+      frompizeroList.clear();
+      fromotherList.clear();
+      reader.nextEvent(event);
+      event.read(particles);
+      if(particles.getRows()>4){ 
+          for(int row = 0; row < particles.getRows(); row++){
+              int pid = particles.getInt("pid",row);
+              int type = particles.getInt("type",row);
+              byte parent = particles.getByte("parent",row);
+              int parentpid = particles.getInt("pid",parent-1);
+              
+              if(pid==22&&type==1) {
+                if(parentpid==111) {
+                  frompizero++;              
+                  frompizeroList.add(row);
+                } else {
+                  fromother++;
+                  fromotherList.add(row);
+                }
+              }
+              if(pid==11) {
+                elec++;
+              }
+            }
+            for(i=0; i<frompizeroList.size(); i++) {
+              for(j=0; j<fromotherList.size(); j++) {
+                byte frompizeroparent = particles.getByte("parent",frompizeroList.get(i));
+                byte fromotherparent = particles.getByte("parent",fromotherList.get(j));
+                int frompizeroparentpid = particles.getInt("pid",frompizeroparent-1);
+                int fromotherparentpid = particles.getInt("pid",fromotherparent-1);
+                byte frompizerograndparent = particles.getByte("parent",frompizeroparent-1);
+                byte fromothergrandparent = particles.getByte("parent",fromotherparent-1);
+                int frompizerograndparentpid = particles.getInt("pid",frompizerograndparent);
+                int fromothergrandparentpid = particles.getInt("pid",fromothergrandparent);
+                
+                if(frompizerograndparentpid==fromotherparentpid) {
+
+                  hgammas.fill(frompizerograndparentpid);
+                
+                  System.out.println("source pid: " + frompizerograndparentpid); 
+                  
+                  vfrompizero.setPxPyPzM(
+                  particles.getFloat("px",frompizeroList.get(i)), 
+                  particles.getFloat("py",frompizeroList.get(i)),
+                  particles.getFloat("pz",frompizeroList.get(i)),
+                  0.1396
+                  );
+                      
+                  vfromother.setPxPyPzM(
+                  particles.getFloat("px",fromotherList.get(j)), 
+                  particles.getFloat("py",fromotherList.get(j)),
+                  particles.getFloat("pz",fromotherList.get(j)),
+                  0.1396
+                  );                           
+                  
+                  
+                  vgammas.copy(vfrompizero);
+                  vgammas.add(vfromother);
+                  hgammas.fill(vgammas.mass());
+                 
+                }
+              }
+            }
+       }
+}
+
+TCanvas ec = new TCanvas("ec",1200,800);
+ec.cd(0).draw(hgammas);
